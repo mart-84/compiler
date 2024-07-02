@@ -35,14 +35,14 @@ public class CodeGeneratorVisitor extends CBaseVisitor<Object> {
 
 	@Override
 	public Object visitFunction(FunctionContext ctx) {
-		output.println(".globl _main");
-		output.println("_main:");
-		output.println("pushl %ebp");
-		output.println("movl %esp, %ebp");
+		output.println(".globl main");
+		output.println("main:");
+		output.println("pushq %rbp");
+		output.println("movq %rsp, %rbp");
 
 		visit(ctx.returnInstruction());
 
-		output.println("popl %ebp");
+		output.println("popq %rbp");
 		output.println("ret");
 
 		return null;

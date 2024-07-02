@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.martinbonnefoy</groupId>
@@ -15,12 +16,18 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 
+		<sonar.organization>mart-84</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.jacoco.reportPath>${basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
+
 		<maven.plugin.compiler.version>3.13.0</maven.plugin.compiler.version>
+		<maven.plugin.surefire.version>3.3.0</maven.plugin.surefire.version>
 		<maven.plugin.shade.version>3.6.0</maven.plugin.shade.version>
 		<antlr.version>4.13.1</antlr.version>
 		<junit.version>5.10.3</junit.version>
 		<logback.version>1.5.6</logback.version>
-	
+		<jacoco.plugin.version>0.8.12</jacoco.plugin.version>
+
 	</properties>
 
 	<dependencies>
@@ -104,7 +111,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<outputDirectory>target/generated-sources/fr/martinbonnefoy/compiler/antlr4</outputDirectory>
+					<outputDirectory>
+						target/generated-sources/fr/martinbonnefoy/compiler/antlr4</outputDirectory>
 					<listener>false</listener>
 					<visitor>true</visitor>
 				</configuration>
@@ -119,6 +127,41 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>jacoco-initialize</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<phase>test-compile</phase>
+					</execution>
+					<execution>
+						<id>jacoco-site</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.plugin.surefire.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>${maven.plugin.surefire.version}</version>
+				<configuration>
+					<outputDirectory>${basedir}/target/site/surefire</outputDirectory>
+					<linkXRef>false</linkXRef>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>${maven.plugin.shade.version}</version>
@@ -129,7 +172,8 @@
 						</goals>
 						<configuration>
 							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>${exec.mainClass}</mainClass>
 								</transformer>
 							</transformers>
