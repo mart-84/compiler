@@ -28,13 +28,16 @@ public class CodeGeneratorVisitor extends CBaseVisitor<Object> {
 
 	@Override
 	public Object visitProg(ProgContext ctx) {
-		visit(ctx.function());
+		if (ctx.function() != null) {
+			visit(ctx.function());
+		}
 
 		return null;
 	}
 
 	@Override
 	public Object visitFunction(FunctionContext ctx) {
+		output.println(".text");
 		output.println(".globl main");
 		output.println("main:");
 		output.println("pushq %rbp");
