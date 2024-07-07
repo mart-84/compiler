@@ -5,7 +5,7 @@ package fr.martinbonnefoy.compiler.antlr4;
 }
 
 prog:
-	function EOF
+	function? EOF
 	;
 	
 function:
@@ -26,7 +26,8 @@ CLOSE_PAREN: ')';
 OPEN_CURLY_BRACKET: '{';
 CLOSE_CURLY_BRACKET: '}';
 
-COMMENT : '/*' .*? '*/' -> skip ;
-SINGLE_LINE_COMMENT : '//' .*? '\n' -> skip ;
-DIRECTIVE : '#' .*? '\n' -> skip ;
-WS    : [ \t\r\n] -> channel(HIDDEN);
+
+COMMENT: '/*' .*? '*/' -> skip ;
+SINGLE_LINE_COMMENT: '//' .*? '\n' -> skip ;
+DIRECTIVE: '#' .*? '\n' -> skip ;
+WS: [ \t\r\n] -> channel(HIDDEN);

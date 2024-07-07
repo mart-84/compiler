@@ -33,7 +33,9 @@ public final class CompilationTestStep {
 	 */
 	public static void compileWithGcc(String sourceFile, String targetFile, String executionOutputFile)
 			throws InterruptedException, IOException, CompilerException {
-		int exitCode = executeProcess(List.of("gcc", "-S", sourceFile, "-O0", "-o", targetFile), executionOutputFile);
+		int exitCode = executeProcess(
+				List.of("gcc", "-Wall", "-Wextra", "-Werror", "-S", sourceFile, "-O0", "-o", targetFile),
+				executionOutputFile);
 		if (exitCode != 0) {
 			throw new CompilerException("GCC Compiler returned a non-zero exit code: " + exitCode);
 		}
@@ -61,7 +63,8 @@ public final class CompilationTestStep {
 	 */
 	public static void linkWithGcc(String sourceFile, String targetFile, String executionOutputFile)
 			throws IOException, InterruptedException, CompilerException {
-		int exitCode = executeProcess(List.of("gcc", sourceFile, "-o", targetFile), executionOutputFile);
+		int exitCode = executeProcess(List.of("gcc", "-Wall", "-Wextra", "-Werror", sourceFile, "-o", targetFile),
+				executionOutputFile);
 		if (exitCode != 0) {
 			throw new CompilerException("GCC Linker returned a non-zero exit code: " + exitCode);
 		}
